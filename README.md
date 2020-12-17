@@ -1,5 +1,5 @@
-## BLOCK-pension
-Block pension allows anyone to register/sponsor and contribute to their beneficiary's retirement.
+## 🏝 BLOCK-pension
+Block pension allows anyone to register and sponsor a beneficiary's pension while also allowing anybody to contribute to it.
 
 A real world scenario would be implementing a contributory pension scheme where employers contribute certain amounts and percentage of their employees salary towards their retirement. With the rising trend of anon devs in the crypto space, the crypto community most especially defi communities could setup and contribute to the retirement of their founders, developers and key stakeholders to incentivize and keep them motivated long term.
 
@@ -7,17 +7,17 @@ The contributions made to a beneficiary's pension are invested by a pension fund
 
 On retirement - which can be anytime, the beneficiary has the option of choosing to withdraw their pensions as annuities or withdrawing all of their pension/benefits at once.
 
-👩🏻‍💻 Development
+# 👩🏻‍💻 Development
 Prerequisites
 Node v10.21.0
 Truffle v5.1.30 (core: 5.1.30)
 Solidity - 0.6.0 (solc-js)
 
-Setup
+# 🏝 Setup
 Clone the repo using git clone https://github.com/ezchinonso/block-pension
 cd block-pension and run npm install in the root directory of the project. To run the frontend, cd into the client directory - yarn install and yarn start to start up the development server.
 
-✅ Testing
+# ✅ Testing
 You can run the tests by running truffle test from the root directory of the project.
 
 
