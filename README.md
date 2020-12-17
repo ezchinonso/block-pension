@@ -1,7 +1,7 @@
 # 🏝 BLOCK-pension
 Block pension allows anyone to register and sponsor a beneficiary's pension while also allowing anybody to contribute to it.
 
-A real world scenario would be implementing a contributory pension scheme where employers contribute certain amounts and percentage of their employees salary towards their retirement. With the rising trend of anon devs in the crypto space, the crypto community most especially defi communities could setup and contribute to the retirement of their founders, developers and key stakeholders to incentivize and keep them motivated long term.
+A real world scenario would be a contributory pension scheme where employers contribute certain amounts and percentage of their employees salary towards their retirement. With the rising trend of anon devs in the crypto space, the crypto community most especially defi communities could setup and contribute to the retirement of their founders, developers and key stakeholders to incentivize and keep them motivated long term.
 
 The contributions made to a beneficiary's pension are invested by a pension fund admin in defi protocols in other to earn and accumulate interest while contributions and withdrawals are made to and fro it. The Pension fund admin could be implemented in any flavour, i.e A PFA that invests beneficiary pension in yearn vaults, decentralized lending and borrowing protocols like aave, money markets like compound or a combination of various protocols. Also, The beneficiary can also switch to a different PFA whom he or she feels earn higher yields on their pension (This is not yet integrated into the dapp). 
 
