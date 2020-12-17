@@ -17,7 +17,7 @@ contract("PensionScheme", accounts => {
   let rTime = now + 6000000000;
   
   beforeEach(async () => {
-    PensionSchemeInstance = await PensionScheme.new();
+    PensionSchemeInstance = await PensionScheme.new({from:carol});
   })
   it('...Retirement Time cannot be less than now', async () => {
     expectRevert(PensionSchemeInstance.register.call(kemi, '1608111987', { from: abu}), 'RTIME_INVALID')
@@ -42,5 +42,11 @@ contract("PensionScheme", accounts => {
     expect(a.toNumber()).to.be.equal(0)
     expect(b.toNumber()).to.be.equal(0)
     expect(c.toNumber()).to.be.equal(0)
+  })
+  it("....Cannot pause pfa", async()=>{
+    expectRevert.unspecified(PensionSchemeInstance.emergencyPauseDeposit.call(2020, {from: abu}))
+    expectRevert.unspecified(PensionSchemeInstance.emergencyPauseWithdraw.call(2020, {from: abu}))
+    expectRevert.unspecified(PensionSchemeInstance.emergencyUnPauseDeposit.call(2020, {from: abu}))
+    expectRevert.unspecified(PensionSchemeInstance.emergencyUnPauseWithdraw.call(2020, {from: abu}))
   })
 });
