@@ -129,7 +129,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -142,7 +143,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -166,7 +168,8 @@
         }
       ],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -185,7 +188,8 @@
         }
       ],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -211,7 +215,8 @@
       "name": "withdrawPension",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -300,7 +305,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -329,7 +335,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -348,7 +355,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -367,7 +375,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -406,7 +415,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [
@@ -425,7 +435,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -25645,7 +25656,7 @@
             {
               "indexed": true,
               "internalType": "uint256",
-              "name": "benefciaryID",
+              "name": "beneficiaryID",
               "type": "uint256"
             },
             {
@@ -25704,8 +25715,8 @@
         }
       },
       "links": {},
-      "address": "0xd3D4Ad85B1d7a46c5834182CD50947c5FAD21948",
-      "transactionHash": "0x22408b84ba00dff82e0d2ecfcffb2306ff47617f7149451613a33dc7ddebfed5"
+      "address": "0x821410748dD37B12b59d2Dc476bB9A435D5DC7Fd",
+      "transactionHash": "0x909c7f9e74b929ffc73c2938775269aee794554362fd90afe73555479639eb19"
     },
     "1607806444854": {
       "events": {
@@ -25976,7 +25987,8 @@
     }
   },
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-12-17T10:06:38.441Z",
+  "updatedAt": "2020-12-17T10:44:10.262Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {
       "balanceOf(uint256)": {
