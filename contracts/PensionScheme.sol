@@ -3,7 +3,6 @@ pragma solidity ^0.6.0;
 import "@openzeppelin/contracts/math/SafeMath.sol";
 //import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Pausable.sol";
 import "./PFAdmin.sol";
 import "./PFAFactory.sol";
 
@@ -16,9 +15,9 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
     mapping(uint => Pension) private pensions;
     
     /**
-    * @notice instanceof Pension fund admin 
+    * @notice OWNER
     */
-    //PFAdmin private admin;
+    address public owner;
 
     /**
     * @notice  beneficiary id counter
@@ -121,6 +120,7 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
     /************************** Functions ****************************/
     constructor() public {
         pensionID = 2020;
+        owner = msg.sender;
     }
 
     /**
@@ -219,7 +219,7 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
           require(pensions[id].totalContribution > 0, 'ZERO_CONTRIBUTIONS');
           
           if(pensions[id].annuitizeWithdrawals){
-              if (getCount(id) == 23){
+              if (getCount(id) == 22){
                   delete pensions[id];
               }
               (bool success,) = address(pensions[id].pfAdmin).call.value(0)(abi.encodeWithSignature('annuitizedWithdraw()'));
@@ -231,6 +231,68 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
           }
 
           emit Withdraw(id, msg.value);
+    }
+
+
+    /** 
+    * @notice pause deposits made into pfa
+    * @dev Throws if pensioner(pension id) doesn't exist
+    * Throws if msg.sender not owner
+    * @param addr address[]
+    */
+    function emergencyPauseDeposit(address[] memory addr) public {
+        require(owner == msg.sender);
+        for(uint i = 0; i < addr.length; ++i){
+            if(contractExists(addr[i])){
+                PFAdmin(payable(addr[i])).emergencyPauseDeposit();
+            }
+            return;
+        }
+    }
+    /** 
+    * @notice pause withdrawals made from pfa
+    * @dev Throws if pensioner(pension id) doesn't exist
+    * Throws if msg.sender not owner
+    * @param addr address[]
+    */
+    function emergencyPauseWithdraw(address[] memory addr) public {
+        require(owner == msg.sender);
+        for(uint i = 0; i < addr.length; ++i){
+            if(contractExists(addr[i])){
+                PFAdmin(payable(addr[i])).emergencyPauseWithdraw();
+            }
+            return;
+        }
+    }
+    /** 
+    * @notice unpause deposits made into pfa
+    * @dev Throws if pensioner(pension id) doesn't exist
+    * Throws if msg.sender not owner
+    * @param addr address[]
+    */
+    function emergencyUnPauseDeposit(address[] memory addr) public {
+        require(owner == msg.sender);
+        for(uint i = 0; i < addr.length; ++i){
+            if(contractExists(addr[i])){
+                PFAdmin(payable(addr[i])).emergencyUnPauseDeposit();
+            }
+            return;
+        }
+    }
+    /** 
+    * @notice unpause withdraw made from pfa
+    * @dev Throws if pensioner(pension id) doesn't exist
+    * Throws if msg.sender not owner
+    * @param addr address[]
+    */
+    function emergencyUnPauseWithdraw(address[] memory addr) public {
+        require(owner == msg.sender);
+        for(uint i = 0; i < addr.length; ++i){
+            if(contractExists(addr[i])){
+                PFAdmin(payable(addr[i])).emergencyUnPauseWithdraw();
+            }
+            return;
+        }
     }
 
     /** 
@@ -247,6 +309,19 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
 
 
     /********************************* view functions **********************/
+
+    /** 
+    * @notice checks if contract exists
+    * @param addr The contract to check
+    * @return bool
+    */
+    function contractExists(address addr) public view returns (bool) {
+        uint size;
+        assembly {
+            size := extcodesize(addr)
+        }
+        return size > 0;
+    }
 
     /** 
     * @notice Returns beneficiary balances. Returns (0,0,0) if no deposit has being made.

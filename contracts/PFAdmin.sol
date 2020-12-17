@@ -5,8 +5,9 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 //import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./interface/cToken.sol";
+import "./Pausable.sol";
 
-contract PFAdmin {
+contract PFAdmin is Pausable{
     using SafeMath for uint;
 
     /**
@@ -37,6 +38,7 @@ contract PFAdmin {
     * @notice Maximum number of time annuity is paid
     */
     uint private withdrawalLimit = 23;
+   
 
     /********************************* Events *********************************/
     /** 
@@ -73,7 +75,8 @@ contract PFAdmin {
     * @dev Throws if not withrawal period.
     * Throws if msg.sender not owner.
     */
-    function annuitizedWithdraw() public {
+
+    function annuitizedWithdraw() public whenWithdrawNotPaused(){
         require(owner == msg.sender,'NOT_AUTHORIZED');
         require(now > time, 'TIMELOCK_ACTIVE' );
         require(counter <= withdrawalLimit );
@@ -97,7 +100,7 @@ contract PFAdmin {
     * @dev Throws if msg.sender not owner.
     * Throws if not withrawal period.
     */
-    function lumpSumWithdraw() public {
+    function lumpSumWithdraw() public whenWithdrawNotPaused(){
         require(owner == msg.sender, 'NOT_AUTHORIZED');
         require(now > time, 'TIMELOCK_ACTIVE');
         uint totalBalance = getBalance();
@@ -113,7 +116,7 @@ contract PFAdmin {
     * Throws if not withrawal period.
     * @return bool 
     */
-    function invest() public payable returns(bool) {
+    function invest() public payable  whenDepositNotPaused() returns(bool) {
         require(owner == msg.sender, 'NOT_AUTHORIZED');
         (bool success,) = address(c).call.value(msg.value)(abi.encodeWithSignature("mint()"));
         require(success);
@@ -132,6 +135,8 @@ contract PFAdmin {
         require(c.redeemUnderlying(amount) == 0, "REDEEM_UNSUCCESSFULL");
 
     }
+
+
     /**
     * @notice Gets balance of underlying asset
     * @return uint
@@ -144,18 +149,37 @@ contract PFAdmin {
         return balance;
         }
     
-    /******************** View Function **********************/
+    /*************************************** View Function ******************************/
     function getCounter() external view returns(uint){
         return counter;
     }
     
         
     
-    /******************** Fallback Function **********************/
+    /************************************ Fallback Function *****************************/
     // This is needed to receive ETH when calling `redeemCEth`
     fallback () external payable {
     }
+
     function recieve() public {}
+
+     /**********************************Emergency Functions ****************************/
+    function emergencyPauseDeposit() external {
+        require(owner == msg.sender);
+        pauseDeposit();
+    }
+    function emergencyPauseWithdraw() external {
+        require(owner == msg.sender);
+        pauseWithdraw();
+    }
+    function emergencyUnPauseDeposit() external {
+        require(owner == msg.sender);
+        unpauseDeposit();
+    }
+    function emergencyUnPauseWithdraw() external {
+        require(owner == msg.sender);
+        unpauseWithdraw();
+    }
 
 }
 
