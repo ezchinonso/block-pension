@@ -1,13 +1,13 @@
 pragma solidity ^0.6.0;
 
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+//import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 //import "@openzeppelin/contracts/utils/Pausable.sol";
 //import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./interface/cToken.sol";
 import "./Pausable.sol";
 
-contract PFAdmin is Pausable{
+contract PFAdmin is Pausable {
     using SafeMath for uint;
 
     /**
@@ -76,7 +76,7 @@ contract PFAdmin is Pausable{
     * Throws if msg.sender not owner.
     */
 
-    function annuitizedWithdraw() public whenWithdrawNotPaused(){
+    function annuitizedWithdraw() external whenWithdrawNotPaused() {
         require(owner == msg.sender,'NOT_AUTHORIZED');
         require(now > time, 'TIMELOCK_ACTIVE' );
         require(counter <= withdrawalLimit );
@@ -100,7 +100,7 @@ contract PFAdmin is Pausable{
     * @dev Throws if msg.sender not owner.
     * Throws if not withrawal period.
     */
-    function lumpSumWithdraw() public whenWithdrawNotPaused(){
+    function lumpSumWithdraw() external whenWithdrawNotPaused(){
         require(owner == msg.sender, 'NOT_AUTHORIZED');
         require(now > time, 'TIMELOCK_ACTIVE');
         uint totalBalance = getBalance();

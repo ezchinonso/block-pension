@@ -8,7 +8,7 @@ import "./PFAFactory.sol";
 
 //import "./PFCustodian.sol";
 
-contract PensionScheme is PFAFactory, ReentrancyGuard{
+contract PensionScheme is PFAFactory, ReentrancyGuard {
     using SafeMath for uint256;
 
 
@@ -24,6 +24,10 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
     */
     uint public pensionID;
 
+    /**
+    * @notice  PFA factory
+    */
+    PFAFactory factory;
     
     /**
     * @notice Container/Struct for Pension info
@@ -118,7 +122,8 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
     */
 
     /************************** Functions ****************************/
-    constructor() public {
+    constructor(address _factory) public {
+        factory = PFAFactory(_factory);
         pensionID = 2020;
         owner = msg.sender;
     }
@@ -139,7 +144,7 @@ contract PensionScheme is PFAFactory, ReentrancyGuard{
         require(_beneficiary != address(this), 'INVALID_ADDR');
         require(_beneficiary != msg.sender, 'SELF_REGISTER');
         require(rTime >= now, 'RTIME_INVALID');
-        address payable admin = deployPFA(_beneficiary, address(this));
+        address payable admin = factory.deployPFA(_beneficiary, address(this));
         uint id = pensionID;
         pensions[id] = Pension({
             beneficiary: _beneficiary,
