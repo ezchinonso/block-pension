@@ -6,8 +6,10 @@ const {
 } = require('@openzeppelin/test-helpers');
 
 const PensionScheme = artifacts.require("../contracts/PensionScheme.sol");
+const PFAFactory = artifacts.require("../contracts/PFAFactory.sol");
 
 contract("PensionScheme", accounts => {
+  let PFAFactoryInstance;
   let PensionSchemeInstance;
   let carol = accounts[0]
   let kemi = accounts[1]
@@ -17,23 +19,30 @@ contract("PensionScheme", accounts => {
   let rTime = now + 6000000000;
   
   beforeEach(async () => {
-    PensionSchemeInstance = await PensionScheme.new({from:carol});
+    PFAFactoryInstance = await PFAFactory.new();
+    let pfa = PFAFactoryInstance.address;
+    PensionSchemeInstance = await PensionScheme.new( pfa, {from:carol});
   })
+  //check that retirement time > now
   it('...Retirement Time cannot be less than now', async () => {
     expectRevert(PensionSchemeInstance.register.call(kemi, '1608111987', { from: abu}), 'RTIME_INVALID')
   })
+  //Check that you can't register yourself
   it("...Cannot register self", async () => {
      expectRevert(PensionSchemeInstance.register.call(abu, rTime, { from: abu}), 'SELF_REGISTER')
   })
-  it("...Returns correct beneficiary ID", async () => {
+  //ensure correct pension Id is returned
+  it("...Returns correct pensions ID", async () => {
     const id = await PensionSchemeInstance.register.call(abu, rTime, { from: kemi})
     expect(id.toNumber()).to.be.equal(2020)
       
   })
+  //check that deposits into nonexistent pensionId is reverted
   it("...Cannot deposit into nonexistent pension", async()=>{
     
     expectRevert(PensionSchemeInstance.deposit.call(2020, {from: carol}), 'GHOST_BENEFICIARY')
   })
+  //Initial pension deposits and contributions should be zero
   it("...Deposit and total contributions should be zero", async () =>{
     let balance = await PensionSchemeInstance.balanceOf.call(2020, {from: carol})
     let a=balance[0]
